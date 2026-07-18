@@ -1,0 +1,27 @@
+# Private lead data — never commit
+leads.jsonl
+leads.csv
+*.leads.jsonl
+private-data/
+data/leads/
+
+# Secrets / local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# QA artifacts
+*-review*.png
+qa-*.js
+qa-*.cjs
+playwright-report/
+test-results/
+
+# Runtime noise
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
