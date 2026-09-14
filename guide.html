@@ -1,0 +1,824 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to use Jarv-ish — the complete guide</title>
+<meta name="description" content="Every Jarv-ish feature explained step by step with real screens: setting up, meetings and the built-in room, the pre-meeting brief, transcripts and analysis, promises, the &lsquo;What we agreed&rsquo; page, rescheduling, the AI Office, the morning brief, tasks, projects, goals and settings.">
+<meta property="og:title" content="How to use Jarv-ish — the complete guide">
+<meta property="og:description" content="Every feature, step by step, with real screens and short videos.">
+<meta property="og:image" content="assets/img/guide/h-morning-brief-playing.jpg">
+<link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1430; --blue:#1565ff; --cyan:#00d4ff; --green:#0bb878; --violet:#7657ff; --amber:#bd6900;
+    --bg:#f4f7fb; --ink:#0b1430; --gray:#6f7d91; --line:#e6e9ef; --card:#ffffff;
+    --radius:14px; --shadow:0 18px 60px rgba(11,20,48,.10); --shadow-sm:0 6px 24px rgba(11,20,48,.08);
+    --max:1180px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  img,video{max-width:100%;display:block}
+  h1,h2,h3{margin:0;letter-spacing:-.02em;line-height:1.2}
+  h1{font-size:clamp(2rem,4.2vw,3rem);font-weight:800}
+  h2{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:800}
+  h3{font-size:1.08rem;font-weight:700;margin:30px 0 2px}
+  p{margin:0}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+  .muted{color:var(--gray)}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+  .eyebrow::before{content:"";width:22px;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:600;font-size:.95rem;border:1px solid transparent;transition:transform .15s ease,box-shadow .15s ease,background .15s ease;cursor:pointer}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 24px rgba(21,101,255,.28)}
+  .btn-primary:hover{background:#0f56e0}
+  .btn-ghost{background:#fff;border-color:var(--line);color:var(--ink)}
+  .btn-ghost:hover{border-color:#c9d3e6}
+
+  /* nav */
+  .nav{position:sticky;top:0;z-index:60;background:rgba(244,247,251,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(230,233,239,.8)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem}
+  .logo .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;display:grid;place-items:center;font-weight:800;box-shadow:0 6px 18px rgba(21,101,255,.35)}
+  .nav-links{display:flex;gap:26px;font-size:.93rem;font-weight:500;color:#334}
+  .nav-links a:hover{color:var(--blue)}
+  .nav-links a.active{color:var(--blue);font-weight:600}
+  .nav-cta{display:flex;gap:10px;align-items:center}
+  .nav-cta .btn{padding:9px 16px}
+  .menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  @media (max-width:980px){.nav-links,.nav-cta .btn-ghost{display:none}.menu-btn{display:inline-flex}
+    .nav-links.open{display:flex;position:absolute;top:68px;left:0;right:0;flex-direction:column;background:#fff;padding:18px 24px;border-bottom:1px solid var(--line);gap:16px}}
+
+  /* hero */
+  .guide-hero{position:relative;padding:56px 0 34px;overflow:hidden;background:linear-gradient(180deg,#fff,transparent)}
+  .guide-hero .wrap{display:grid;gap:16px;max-width:860px}
+  .guide-hero p.lead{font-size:1.1rem;color:var(--gray)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:.85rem;font-weight:500;color:#334}
+  .chip:hover{border-color:#b9c7e2;color:var(--blue)}
+  .glow{position:absolute;left:50%;top:-160px;width:900px;height:460px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(21,101,255,.14),rgba(0,212,255,.07),transparent 70%);filter:blur(30px);pointer-events:none}
+
+  /* layout */
+  .layout{display:grid;grid-template-columns:262px minmax(0,1fr);gap:44px;align-items:start;padding:22px 0 70px}
+  @media (max-width:1040px){.layout{grid-template-columns:1fr;gap:18px}}
+  .toc{position:sticky;top:92px;max-height:calc(100vh - 120px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px 14px;box-shadow:var(--shadow-sm)}
+  .toc h4{margin:0 0 10px 8px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gray)}
+  .toc>summary{display:none}
+  .toc ol{list-style:none;margin:0;padding:0;display:grid;gap:2px;counter-reset:none}
+  .toc a{display:flex;gap:10px;align-items:baseline;padding:7px 9px;border-radius:9px;font-size:.9rem;color:#3b475c}
+  .toc a .n{font-variant-numeric:tabular-nums;font-weight:700;color:var(--gray);min-width:16px}
+  .toc a:hover{background:#f2f6ff;color:var(--blue)}
+  .toc a.active{background:rgba(21,101,255,.09);color:var(--blue);font-weight:600}
+  .toc a.active .n{color:var(--blue)}
+  @media (max-width:1040px){
+    .toc{position:static;max-height:none;padding:12px 14px}
+    .toc>summary{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:600;list-style:none;font-size:.95rem}
+    .toc>summary::-webkit-details-marker{display:none}
+    .toc>summary::after{content:"▾";color:var(--blue);font-size:1.1rem}
+    .toc[open]>summary::after{content:"▴"}
+    .toc>h4{display:none}
+    .toc[open]>ol{margin-top:10px}
+  }
+
+  /* chapters */
+  .chapter{background:#fff;border:1px solid var(--line);border-radius:18px;padding:34px 34px 38px;box-shadow:var(--shadow-sm);scroll-margin-top:92px}
+  .chapter + .chapter{margin-top:26px}
+  @media (max-width:680px){.chapter{padding:24px 18px 28px}}
+  .chapter-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .chapter-num{flex:none;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--navy),#1b2c62);color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.05rem;box-shadow:0 8px 20px rgba(11,20,48,.22)}
+  .chapter-head .lead{margin-top:7px;color:var(--gray);font-size:1rem}
+  .chapter p{margin:14px 0 0;color:#33415a}
+  .chapter h3{color:var(--navy)}
+  .chapter h3::before{content:"";display:block;height:1px;background:var(--line);margin:0 0 16px}
+  .chapter h3:first-of-type::before{display:none}
+
+  .steps-list{counter-reset:s;list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px}
+  .steps-list li{position:relative;padding-left:38px;color:#33415a}
+  .steps-list li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:1px;width:25px;height:25px;border-radius:50%;background:rgba(21,101,255,.1);color:var(--blue);font-weight:700;font-size:.8rem;display:grid;place-items:center}
+  .bullets{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:9px}
+  .bullets li{position:relative;padding-left:24px;color:#33415a}
+  .bullets li::before{content:"";position:absolute;left:4px;top:10px;width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan))}
+
+  .shot{margin:22px 0 0}
+  .frame{position:relative;border-radius:14px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden}
+  .frame .bar{height:32px;display:flex;align-items:center;gap:6px;padding:0 13px;border-bottom:1px solid var(--line);background:#fafbfe}
+  .frame .bar i{width:9px;height:9px;border-radius:50%;background:#e2e6ee}
+  .frame .bar i:nth-child(1){background:#ff8f8f}.frame .bar i:nth-child(2){background:#ffd36a}.frame .bar i:nth-child(3){background:#6fe0a8}
+  .frame .bar span{margin-left:10px;font-size:.71rem;color:var(--gray);background:#fff;border:1px solid var(--line);border-radius:6px;padding:2px 10px}
+  .shot figcaption{margin-top:9px;font-size:.82rem;color:var(--gray);text-align:center}
+  .two-up{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:780px){.two-up{grid-template-columns:1fr}}
+  .two-up .shot{margin-top:22px}
+
+  .tip{margin:20px 0 0;background:#f2f6ff;border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:13px 16px;font-size:.94rem;color:#33415a}
+  .tip b{color:var(--blue)}
+  .tip.warn{background:#fff7ec;border-left-color:var(--amber)}
+  .tip.warn b{color:var(--amber)}
+  .tip.good{background:#eefaf4;border-left-color:var(--green)}
+  .tip.good b{color:#088457}
+
+  .table-wrap{margin:18px 0 0;overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.93rem;min-width:520px}
+  tr + tr{border-top:1px solid var(--line)}
+  th{text-align:left;font-weight:600;color:var(--navy);background:#f8fafd;padding:11px 14px;width:32%;vertical-align:top}
+  td{padding:11px 14px;color:#33415a;vertical-align:top}
+
+  /* cta + footer */
+  .cta-band{background:linear-gradient(160deg,#0b1430,#101c45 60%,#0b1430);color:#fff;border-radius:20px;padding:40px;text-align:center;display:grid;gap:14px;justify-items:center;margin-top:30px}
+  .cta-band h2{color:#fff}
+  .cta-band p{color:rgba(255,255,255,.72);max-width:560px}
+  footer{border-top:1px solid var(--line);padding:36px 0;color:var(--gray);font-size:.88rem;background:#fff}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  footer nav{display:flex;gap:18px;flex-wrap:wrap}
+  .top-link{position:fixed;right:20px;bottom:20px;z-index:40;background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-size:.85rem;font-weight:600;box-shadow:var(--shadow-sm);opacity:0;pointer-events:none;transition:opacity .2s}
+  .top-link.show{opacity:1;pointer-events:auto}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="mark">J</span>Jarv-ish</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html#meetings">Meetings</a>
+      <a href="index.html#before-after">Before &amp; after</a>
+      <a href="index.html#office">AI Office</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a class="active" href="guide.html">Guide</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="https://app.jarv-ish.com/login">Sign in</a>
+      <a class="btn btn-primary" href="https://app.jarv-ish.com/register">Get started</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="guide-hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <span class="eyebrow">User guide · A to Z</span>
+    <h1>How to use Jarv-ish</h1>
+    <p class="lead">Every feature, in the order you meet it, with the real screens from the product and short videos of each flow. Start at the top if you're new, or jump to what you need.</p>
+    <div class="chips">
+      <a class="chip" href="#start"><b>1</b> Getting started</a>
+      <a class="chip" href="#meetings"><b>2</b> Meetings &amp; the room</a>
+      <a class="chip" href="#brief"><b>3</b> Pre-meeting brief</a>
+      <a class="chip" href="#after"><b>4</b> After the meeting</a>
+      <a class="chip" href="#reschedule"><b>5</b> Rescheduling</a>
+      <a class="chip" href="#office"><b>6</b> The AI Office</a>
+      <a class="chip" href="#talk"><b>7</b> Talk to your office</a>
+      <a class="chip" href="#morning"><b>8</b> The morning brief</a>
+      <a class="chip" href="#workspace"><b>9</b> Tasks &amp; projects</a>
+      <a class="chip" href="#settings"><b>10</b> Settings</a>
+      <a class="chip" href="#plans"><b>11</b> Plans</a>
+      <a class="chip" href="#answers"><b>12</b> Quick answers</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap layout">
+  <details class="toc" id="tocBox" open>
+    <summary>Contents</summary>
+    <h4>Contents</h4>
+    <ol id="tocList"><li><a href="#start"><span class="n">1</span>Getting started</a></li><li><a href="#meetings"><span class="n">2</span>Meetings and the built-in room</a></li><li><a href="#brief"><span class="n">3</span>Before the meeting: the pre-meeting brief</a></li><li><a href="#after"><span class="n">4</span>After the meeting: agreement, promises, approvals</a></li><li><a href="#reschedule"><span class="n">5</span>Rescheduling: “propose a new time”</a></li><li><a href="#office"><span class="n">6</span>The AI Office</a></li><li><a href="#talk"><span class="n">7</span>Talk to your office</a></li><li><a href="#morning"><span class="n">8</span>The morning brief</a></li><li><a href="#workspace"><span class="n">9</span>Tasks, projects, goals and reports</a></li><li><a href="#settings"><span class="n">10</span>Settings, profile and notifications</a></li><li><a href="#plans"><span class="n">11</span>Plans</a></li><li><a href="#answers"><span class="n">12</span>Quick answers</a></li></ol>
+  </details>
+  <div class="content">
+<section class="chapter" id="start">
+  <header class="chapter-head">
+    <span class="chapter-num">1</span>
+    <div>
+      <h2>Getting started</h2>
+      <p class="lead">Create your workspace, meet your assistant, and learn the five areas you will actually use. Five short steps, then your first meeting.</p>
+    </div>
+  </header>
+  <h3 id="">Create your account and sign in</h3>
+  <ol class="steps-list"><li>Open <b>app.jarv-ish.com</b> in Chrome or Edge — the built-in meeting room and background effects work best there.</li><li>Click <b>Create account</b>, enter your name, email and a password, and confirm it.</li><li>Sign in with the same email and password. If your company bought a plan, the plan is matched to your email automatically — no code to enter.</li></ol>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/a-register.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Create account — name, email, password."></div>
+  <figcaption>Create account — name, email, password.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/a-login.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Sign in. “Forgot password?” emails you a reset link."></div>
+  <figcaption>Sign in. “Forgot password?” emails you a reset link.</figcaption>
+</figure></div>
+  <h3 id="">The welcome flow (first sign-in only)</h3>
+  <p>The first time you sign in, Jarv-ish walks you through five short steps. You can leave at any time — the dashboard keeps a Getting-started card until every step is done or dismissed.</p>
+  <ol class="steps-list"><li><b>Meet your assistant</b> — give it a name, pick the language it speaks, its voice and its speaking style. Press “Hear your assistant say hello” to test it. This is the voice every brief is read in, and the name you say to it in a meeting.</li><li><b>Connect your calendar</b> — sign in with Google and your Jarv-ish meetings become Google Calendar events with invitations, RSVPs sync back, and the morning brief knows your day. You can skip this and connect later in Settings.</li><li><b>Connect your AI Office</b> — paste your agent’s gateway URL and token, then press Test connection. Without an office Jarv-ish still runs, briefs and analyses meetings; the office features unlock when you connect one.</li><li><b>How work flows</b> — a sixty-second tour of where the AI helps and where it waits for you: meetings turn into tasks, one click sends office-sized tasks to your office, questions come back to you in Waiting on you, delivered work is marked “Done by” the agent.</li><li><b>Your first win</b> — schedule your next meeting (Jarv-ish briefs you before it) or paste a past transcript (Jarv-ish analyses it in about a minute).</li></ol>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/n-welcome-1.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Step 1 — name, language, voice, speaking style, timezone."></div>
+  <figcaption>Step 1 — name, language, voice, speaking style, timezone.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/n-welcome-3.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Step 3 — gateway URL, token, optional Claw HQ link and brief hour."></div>
+  <figcaption>Step 3 — gateway URL, token, optional Claw HQ link and brief hour.</figcaption>
+</figure></div>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/n-welcome-2.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Step 2 — Google Workspace: invitations, RSVPs and past Google Meet transcripts."></div>
+  <figcaption>Step 2 — Google Workspace: invitations, RSVPs and past Google Meet transcripts.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-welcome-tour.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Step 4 — the tour. Its last card adapts to whether your office is connected."></div>
+  <figcaption>Step 4 — the tour. Its last card adapts to whether your office is connected.</figcaption>
+</figure></div>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/n-welcome-5.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Step 5 — schedule a meeting or paste a transcript. Your first brief arrives the next morning."></div>
+  <figcaption>Step 5 — schedule a meeting or paste a transcript. Your first brief arrives the next morning.</figcaption>
+</figure>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <video muted loop playsinline preload="none" poster="assets/video/onboarding-poster.jpg" src="assets/video/onboarding.mp4" data-autoplay></video></div>
+  <figcaption>▶ The first-run flow, including the “How work flows” tour.</figcaption>
+</figure>
+  <div class="tip "><b>Good to know:</b> Three welcome emails arrive over your first three days (day 0, 1 and 3) showing what to try next: finish setup, play your morning brief, and hand something to your office.</div>
+  <h3 id="">The dashboard</h3>
+  <p>Your home page: a greeting with the day, four counters (total meetings, upcoming, pending tasks, completed), quick actions, the <b>Instant Meeting</b> button, the executive section (your day and what needs you), and lists of upcoming and recently processed meetings, recent tasks and any processing failures.</p>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <video muted loop playsinline preload="none" poster="assets/video/dashboard-poster.jpg" src="assets/video/dashboard.mp4" data-autoplay></video></div>
+  <figcaption>▶ The dashboard and the meetings list.</figcaption>
+</figure>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/b-dashboard-top.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Dashboard — counters, quick actions and the Instant Meeting button."></div>
+  <figcaption>Dashboard — counters, quick actions and the Instant Meeting button.</figcaption>
+</figure>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/b-dashboard-lists.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Further down: upcoming meetings, recently processed meetings (times in your timezone) and recent tasks."></div>
+  <figcaption>Further down: upcoming meetings, recently processed meetings (times in your timezone) and recent tasks.</figcaption>
+</figure>
+  <ol class="steps-list"><li><b>Start Instant Meeting</b> opens a Jarv-ish room right now — recording, transcript and summary run as usual.</li><li><b>New meeting</b> opens the scheduling form (chapter 2).</li><li>Click any meeting to open its page; click a task to open it on the Tasks page.</li></ol>
+  <h3 id="">Finding your way around</h3>
+  <p>The sidebar lists every area with a one-line description. Hover an item for the same description as a tooltip.</p>
+  <div class="table-wrap"><table><tr><th>Dashboard</th><td>Today at a glance.</td></tr><tr><th>Morning brief</th><td>Your day, read to you — what’s waiting, what your office can take, your meetings, projects and goals.</td></tr><tr><th>Waiting on you</th><td>Decisions only you can make: task approvals, office questions, reschedule requests, plan sign-offs. The badge counts them.</td></tr><tr><th>Meetings → Promises</th><td>Rooms, transcripts and analysis. Promises: who owes what, per person, across every meeting.</td></tr><tr><th>AI Office → Talk to your office, Tasks, Projects, Goals, Agents</th><td>Work you’ve handed to your agents, and the conversation you have with them.</td></tr><tr><th>Reports</th><td>Meetings per week, status, AI usage and office token usage.</td></tr><tr><th>Settings → Profile, Notifications</th><td>Assistant, calendar, agent, appearance, billing; your profile and password; notification history.</td></tr></table></div>
+  <div class="tip "><b>Note:</b> “Invite Jarv-ish into a call” is a button on the Meetings page, not a menu item — it is something you do to a meeting, not a place. Items outside your plan (for example Agents) stay visible but greyed with a lock, and clicking one shows what unlocks it.</div>
+</section>
+
+<section class="chapter" id="meetings">
+  <header class="chapter-head">
+    <span class="chapter-num">2</span>
+    <div>
+      <h2>Meetings and the built-in room</h2>
+      <p class="lead">Schedule a meeting, run it in Jarv-ish (or bring a Google Meet transcript), and get decisions, tasks, risks and promises out of it without taking a note.</p>
+    </div>
+  </header>
+  <h3 id="">Create a meeting</h3>
+  <ol class="steps-list"><li>Go to <b>Meetings</b> and click <b>New meeting</b>.</li><li>Choose the type: <b>Instant Meeting</b> (a room inside Jarv-ish with recording and a join link — the same room the dashboard button starts right now), <b>Google Meet</b> (Jarv-ish fetches the transcript afterwards), or <b>Manual Transcript</b> (you paste the text later).</li><li>Enter the title, date, start time and timezone. The timezone defaults to your profile; the time is stored in that zone and shown to every attendee in theirs.</li><li>Add attendees — one email per line, or comma-separated. Each gets an invitation with the join link, a “Join by phone” line and a “Can’t make this time? Propose another” link.</li><li>Optionally add a description and instructions for the analysis (for example “focus on pricing decisions”).</li><li>Click <b>Create</b>. If Google Calendar is connected, the event is created there too and Google sends its own invitations.</li></ol>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/c-new-meeting.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="New meeting — type, title, date, time, timezone, attendees."></div>
+  <figcaption>New meeting — type, title, date, time, timezone, attendees.</figcaption>
+</figure>
+  <div class="tip "><b>Emails:</b> Attendees get a reminder one hour before. <b>You get one email</b> an hour before — your pre-meeting brief, with the join link inside it (chapter 3). No duplicate reminder.</div>
+  <h3 id="">The meetings list</h3>
+  <p>Every meeting with its scheduled time (in the meeting’s timezone, with the zone label), type, status, attendee count and creation date. Filter by All / Scheduled / Processing / Completed / Failed, or search. The meeting network above the table shows who you meet about what; past meetings that never happened show “Past · no transcript” instead of “Scheduled”.</p>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/c-meetings-list.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Meetings — the list, filters and the meeting network."></div>
+  <figcaption>Meetings — the list, filters and the meeting network.</figcaption>
+</figure>
+  <h3 id="">The meeting page</h3>
+  <p>Open any meeting to see its page. The top has the action bar (Fetch Google transcript, Paste transcript, Upload transcript file, Reprocess analysis, Download report (.docx), Email transcript, Edit meeting, Delete meeting), then the cards that apply: the pre-meeting brief strip for upcoming meetings, the Instant Meeting card with Join and Copy meeting link, any proposals to reschedule, the “What we agreed” recap card, and the analysis tabs.</p>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/e-upcoming-meeting.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="An upcoming meeting — brief strip, Join Instant Meeting, Copy meeting link, Join by phone, details."></div>
+  <figcaption>An upcoming meeting — brief strip, Join Instant Meeting, Copy meeting link, Join by phone, details.</figcaption>
+</figure>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-meeting-overview.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="A completed meeting — counts of tasks, decisions, risks and suggestions, and the executive summary."></div>
+  <figcaption>A completed meeting — counts of tasks, decisions, risks and suggestions, and the executive summary.</figcaption>
+</figure>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-edit-meeting.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Edit meeting — title, date, time, timezone, attendees, description and analysis instructions."></div>
+  <figcaption>Edit meeting — title, date, time, timezone, attendees, description and analysis instructions.</figcaption>
+</figure>
+  <ul class="bullets"><li><b>Edit meeting</b> changes title, date, time, timezone, attendees, description and instructions. Changing the time re-sends invitations with an updated calendar file and updates the Google Calendar event.</li><li><b>Delete meeting</b> removes it. Cancelling sends a cancellation to attendees and cancels the Google event.</li></ul>
+  <h3 id="">Join an Instant Meeting</h3>
+  <ol class="steps-list"><li>Click <b>Join Instant Meeting</b> on the meeting page (or <b>Start Instant Meeting</b> on the dashboard to open a room right now).</li><li>On the pre-join screen check your camera preview, mute or unmute, and click <b>Join meeting</b>. You join with microphone and camera off and turn them on from the control bar.</li><li>Guests open the same link, type their name, optionally tick “Email me the transcript &amp; notes”, and join — no account. On a phone the same link opens in the browser.</li></ol>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-room-prejoin.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Pre-join — camera preview, mic/camera toggles, transcript email for guests, and “Can’t make this time?”."></div>
+  <figcaption>Pre-join — camera preview, mic/camera toggles, transcript email for guests, and “Can’t make this time?”.</figcaption>
+</figure>
+  <p>The control bar at the bottom has: microphone (with a chevron to switch microphone or speaker), camera (with a chevron to switch camera), Effects, Share screen, Participants, Invite, Chat, Leave, and — for the host — End meeting for everyone. Recording starts automatically and the “Recording” indicator at the top tells you its real state.</p>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com/meet</span></div>
+  <video muted loop playsinline preload="none" poster="assets/video/meeting-room-poster.jpg" src="assets/video/meeting-room.mp4" data-autoplay></video></div>
+  <figcaption>▶ The room — grid view, speaker view, background effects and the control bar.</figcaption>
+</figure>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-room-grid.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Grid view — everyone the same size. Hover a tile and click Pin to keep someone on stage."></div>
+  <figcaption>Grid view — everyone the same size. Hover a tile and click Pin to keep someone on stage.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-room-speaker.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Speaker view — whoever is talking fills the screen, others in the filmstrip."></div>
+  <figcaption>Speaker view — whoever is talking fills the screen, others in the filmstrip.</figcaption>
+</figure></div>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-room-effects-menu.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Effects — None, Blur, four built-in backgrounds, or upload your own image. Runs on your computer."></div>
+  <figcaption>Effects — None, Blur, four built-in backgrounds, or upload your own image. Runs on your computer.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-room-devices.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Switch microphone, speaker or camera without leaving the call. Your choice is remembered."></div>
+  <figcaption>Switch microphone, speaker or camera without leaving the call. Your choice is remembered.</figcaption>
+</figure></div>
+  <ul class="bullets"><li><b>Share screen</b> — your presentation becomes the stage (never cropped) and cameras move into the filmstrip; click a participant to pin them, or the share tile to return to the presentation.</li><li><b>Chat</b> — in-meeting text chat. <b>Participants</b> — who is in the room. <b>Invite</b> — copies the join link.</li><li><b>Leave</b> keeps the meeting running for others. <b>End meeting for everyone</b> (host) ends it and starts processing.</li><li><b>Reopen room</b> — if the host left by mistake or ended too soon, the host can reopen the room for 60 minutes from the ended-meeting page. The same link works again for everyone; the first part is analysed on its own and the continuation gets its own analysis.</li></ul>
+  <h3 id="">Invite Jarv-ish into a call</h3>
+  <p>From the Meetings page, click <b>Invite Jarv-ish into a call</b>. Pick one of your Instant Meetings with a live session and your assistant joins as a clearly labelled AI participant — the same name, voice and personality you set in Settings. Choose the mode (Observer, Addressed only, Assistant), tick the knowledge scopes it may use (this meeting, projects, tasks, AI Office, executive memory) and click Join meeting.</p>
+  <ul class="bullets"><li>It says hello when it joins: “Hi Jordan and Sam — Ivy here. I’ll listen along and keep the notes…”</li><li>It answers when someone says its name — the name you gave it, or “Jarvis” / “Jarv-ish” / “Harold”. For the next 25 seconds you can keep talking to it without repeating the name.</li><li>It remembers the last few exchanges, so “and the second one?” works. It uses first names when natural and asks one short question back when yours is unclear.</li><li>It never takes actions without your approval, and every question and answer is audited on the right of the panel.</li></ul>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/f-meeting-agent.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Invite Jarv-ish into a call — session, mode, knowledge scopes, live interaction and the audit trail."></div>
+  <figcaption>Invite Jarv-ish into a call — session, mode, knowledge scopes, live interaction and the audit trail.</figcaption>
+</figure>
+  <h3 id="">Transcripts</h3>
+  <p>A Jarv-ish room records and transcribes automatically when the meeting ends. For every other meeting:</p>
+  <ol class="steps-list"><li><b>Fetch Google transcript</b> — for a Google Meet meeting, once Google has produced the transcript.</li><li><b>Paste transcript</b> — paste the text and click Save transcript.</li><li><b>Upload transcript file</b> — upload a text or document file.</li><li><b>Reprocess analysis</b> — run the analysis again after changing the transcript or the instructions.</li><li><b>Email transcript</b> — sends the transcript and report to the attendees you choose.</li></ol>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-paste-transcript.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Paste transcript — the fastest way to analyse a meeting that happened somewhere else."></div>
+  <figcaption>Paste transcript — the fastest way to analyse a meeting that happened somewhere else.</figcaption>
+</figure>
+  <h3 id="">What the analysis gives you</h3>
+  <p>Once a transcript exists, the analysis is ready in about a minute. The tabs on the meeting page:</p>
+  <div class="table-wrap"><table><tr><th>Overview</th><td>Counts, room status, meeting details and the executive summary.</td></tr><tr><th>Summary</th><td>The executive summary, key discussion points, recommendations, sentiment and any unanswered questions.</td></tr><tr><th>Transcript</th><td>The full text.</td></tr><tr><th>Tasks</th><td>Action items with owner, due date, confidence and the sentence they came from. Approve, Edit &amp; approve, or Dismiss. Approved tasks show “Your office can take N of these” with Start buttons (chapter 6).</td></tr><tr><th>Decisions</th><td>What was decided.</td></tr><tr><th>Risks</th><td>Risks mentioned, with severity.</td></tr><tr><th>Promises</th><td>Every “I’ll send that by Friday” — who owes what (You / Them), with Kept and Doesn’t-apply buttons.</td></tr><tr><th>Follow-ups</th><td>Things to come back to.</td></tr><tr><th>Suggested actions</th><td>Automations Jarv-ish proposes (for example scheduling the follow-up) — each needs your approval.</td></tr></table></div>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <video muted loop playsinline preload="none" poster="assets/video/meeting-intelligence-poster.jpg" src="assets/video/meeting-intelligence.mp4" data-autoplay></video></div>
+  <figcaption>▶ The meeting page: summary → tasks → decisions → promises.</figcaption>
+</figure>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-meeting-tab-summary.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Summary — executive summary, key points, recommendations, sentiment."></div>
+  <figcaption>Summary — executive summary, key points, recommendations, sentiment.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-meeting-tab-decisions.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Decisions — what was agreed, with the source line."></div>
+  <figcaption>Decisions — what was agreed, with the source line.</figcaption>
+</figure></div>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-meeting-tab-tasks.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Tasks — approval queue with the office strip above the list."></div>
+  <figcaption>Tasks — approval queue with the office strip above the list.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-meeting-tab-risks.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Risks — what was flagged, and how serious it is."></div>
+  <figcaption>Risks — what was flagged, and how serious it is.</figcaption>
+</figure></div>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-meeting-tab-promises.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Promises — You / Them, due dates, Kept and “doesn’t apply”."></div>
+  <figcaption>Promises — You / Them, due dates, Kept and “doesn’t apply”.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-meeting-tab-suggested-actions.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Suggested actions — automations Jarv-ish proposes, each approval-gated."></div>
+  <figcaption>Suggested actions — automations Jarv-ish proposes, each approval-gated.</figcaption>
+</figure></div>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-meeting-tab-transcript.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="The Transcript tab — the full text, searchable."></div>
+  <figcaption>The Transcript tab — the full text, searchable.</figcaption>
+</figure>
+  <div class="tip "><b>Reports:</b> <b>Download report (.docx)</b> gives you the whole analysis as a Word document; the .md link gives the same as Markdown — useful for pasting into your own notes.</div>
+</section>
+
+<section class="chapter" id="brief">
+  <header class="chapter-head">
+    <span class="chapter-num">3</span>
+    <div>
+      <h2>Before the meeting: the pre-meeting brief</h2>
+      <p class="lead">One hour before every meeting, Jarv-ish emails you a brief — and can read it to you. It is your reminder and your preparation in one email.</p>
+    </div>
+  </header>
+  <p>The brief covers who is joining and how often you’ve met them, what was decided last time with this group, what you still owe them and what they owe you, and any office work already prepared for this meeting.</p>
+  <ol class="steps-list"><li>Open the meeting page of an upcoming meeting — the <b>Pre-meeting brief</b> strip is at the top.</li><li>Click <b>Open pre-meeting brief</b> to read it, or press <b>Play</b> to hear it in your assistant’s voice (about a minute).</li><li>Click <b>Email it to me now</b> to get it immediately instead of waiting for the automatic one-hour email.</li><li>From the brief page, <b>Join the call</b> opens the room; <b>Read instead</b> shows the text.</li></ol>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <video muted loop playsinline preload="none" poster="assets/video/pre-meeting-brief-poster.jpg" src="assets/video/pre-meeting-brief.mp4" data-autoplay></video></div>
+  <figcaption>▶ Opening the pre-meeting brief from an upcoming meeting.</figcaption>
+</figure>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/e-pre-meeting-brief.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="The brief — spoken headline, Play, Join the call, Read instead, Email it to me."></div>
+  <figcaption>The brief — spoken headline, Play, Join the call, Read instead, Email it to me.</figcaption>
+</figure>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/e-pre-meeting-brief-2.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Further down: who’s joining (with history), decided last time, open commitments on both sides, office work for this group."></div>
+  <figcaption>Further down: who’s joining (with history), decided last time, open commitments on both sides, office work for this group.</figcaption>
+</figure>
+  <div class="tip "><b>“This group”:</b> Only the other side of the table defines the group. Your own address and colleagues who sit in on most of your meetings are treated as internal automatically — so a first meeting with a new client says “first meeting”, not “meeting #21”.</div>
+  <h3 id="">The day-before agenda offer (recurring meetings)</h3>
+  <p>For meetings you have held before with the same people or title, Jarv-ish checks the day before whether anything is actually open — promises, tasks or office work. If something is, you get a one-line email: <em>“There’s a suggested agenda for tomorrow’s meeting — want to see it?”</em> with a <b>Show me the agenda</b> button. The agenda, and a note you can send with it, live on the brief page with a Copy-note-to-attendees button.</p>
+  <div class="tip good"><b>Quiet by default:</b> If nothing is open, nothing is sent. No “nothing to discuss” email, no empty card.</div>
+</section>
+
+<section class="chapter" id="after">
+  <header class="chapter-head">
+    <span class="chapter-num">4</span>
+    <div>
+      <h2>After the meeting: agreement, promises, approvals</h2>
+      <p class="lead">Turn the call into something the other side can confirm, a memory of who owes what, and a short queue of decisions only you can make.</p>
+    </div>
+  </header>
+  <h3 id="">“What we agreed” — a page for your attendees</h3>
+  <p>Instead of a summary email nobody answers, Jarv-ish drafts a short, confirmable agreement from the decisions, approved tasks and promises.</p>
+  <ol class="steps-list"><li>On an analysed meeting, find the <b>“What we agreed” — a page for your attendees</b> card and click <b>Review &amp; send</b>.</li><li>Check the intro, the decisions, the who-does-what (with dates) and the recipients. Edit anything.</li><li>Click <b>Send</b>. Attendees get an email with a private link — no account needed.</li><li>The page shows only what you approved (never the transcript or the recording) and asks one question: does this match what you heard? They <b>Confirm</b> or <b>Flag something</b>.</li><li>Their answer comes back as a notification and on the card (Sent · Confirmed · Flagged). Edit and resend at any time.</li></ol>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <video muted loop playsinline preload="none" poster="assets/video/agreed-poster.jpg" src="assets/video/agreed.mp4" data-autoplay></video></div>
+  <figcaption>▶ The client-facing “What we agreed” page being confirmed.</figcaption>
+</figure>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/d-recap-review.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Review &amp; send — everything drafted, everything editable."></div>
+  <figcaption>Review &amp; send — everything drafted, everything editable.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-agreed.jpg" width="1200" height="1080" loading="lazy" decoding="async" alt="What the attendee sees: decisions, who does what, and one Confirm button."></div>
+  <figcaption>What the attendee sees: decisions, who does what, and one Confirm button.</figcaption>
+</figure></div>
+  <h3 id="">Promises — memory per person</h3>
+  <p>Promises keeps every promise from every meeting, per person: what you owe them, what they owe you, what is overdue and what has been kept.</p>
+  <ol class="steps-list"><li>Open <b>Meetings → Promises</b>. One row per person with the meetings count, last met, next meeting and the counts.</li><li>Click a person to see both sides’ promises with their source meeting, the next meeting’s brief, and every decision made with them.</li><li>Mark a promise <b>Kept</b> or <b>Doesn’t apply</b> from any promise list. Kept promises are struck through; your own promises due today appear in the morning brief.</li></ol>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <video muted loop playsinline preload="none" poster="assets/video/commitments-poster.jpg" src="assets/video/commitments.mp4" data-autoplay></video></div>
+  <figcaption>▶ The promises list and a per-person page.</figcaption>
+</figure>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/i-promises.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Promises — one row per person, both directions, overdue in amber."></div>
+  <figcaption>Promises — one row per person, both directions, overdue in amber.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/i-promises-person.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="One person’s page: what you owe, what they owe, and the history behind it."></div>
+  <figcaption>One person’s page: what you owe, what they owe, and the history behind it.</figcaption>
+</figure></div>
+  <h3 id="">Waiting on you — decisions only</h3>
+  <p>Everything that needs a decision from you, in one place: tasks awaiting approval, reschedule requests, office questions and approvals, suggested automations, and project plans awaiting review. The sidebar badge counts them.</p>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/j-waiting.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Waiting on you — with “Office can do this” tags and the one-click office buttons (when your office is connected)."></div>
+  <figcaption>Waiting on you — with “Office can do this” tags and the one-click office buttons (when your office is connected).</figcaption>
+</figure>
+  <h3 id="">Approving a task</h3>
+  <ol class="steps-list"><li><b>Approve</b> — the task goes onto your task list for you to do.</li><li><b>Edit &amp; approve</b> — change the wording, description or priority first, then approve.</li><li><b>Dismiss</b> — it won’t be suggested again.</li><li><b>Approve &amp; send to office</b> (office-sized tasks, office connected) — approves, writes the brief from the meeting, and hands it to the agent in one click. <b>Send N to office</b> does every office-sized task at once.</li><li>Rows disappear immediately and a message confirms what happened. If the server refuses, the row comes back with the reason.</li></ol>
+  <div class="tip "><b>How it decides:</b> Anything only a person can do — a call or meeting, a decision, an approval, a signature, a payment, a visit, a hire — is marked <b>Needs you</b>. Deliverable work (a draft, a document, research, a comparison, a compilation, a deck, a proposal, pricing) is <b>Office can do this</b>. Nothing is ever sent without your click.</div>
+</section>
+
+<section class="chapter" id="reschedule">
+  <header class="chapter-head">
+    <span class="chapter-num">5</span>
+    <div>
+      <h2>Rescheduling: “propose a new time”</h2>
+      <p class="lead">Every invitation, reminder and join page carries a personal “Can’t make this time? Propose another” link — so a guest’s new time reaches you instead of disappearing inside Google Calendar.</p>
+    </div>
+  </header>
+  <h3 id="">What your guest does</h3>
+  <ol class="steps-list"><li>They open the link. The page shows your free slots for the next working days — Google Calendar free/busy plus your Jarv-ish meetings, inside your working hours — displayed in their own timezone.</li><li>They tap a slot, or choose “None of these work — pick my own time” and set a date, time and timezone.</li><li>They add their name, email (pre-filled from the invitation) and an optional note, then press <b>Send proposal</b>.</li><li>They see “Sent to …” and get an email when you answer.</li></ol>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <video muted loop playsinline preload="none" poster="assets/video/reschedule-flow-poster.jpg" src="assets/video/reschedule-flow.mp4" data-autoplay></video></div>
+  <figcaption>▶ A guest proposes a new time on the public page, then the owner accepts on the meeting page.</figcaption>
+</figure>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-reschedule-page.jpg" width="1200" height="1080" loading="lazy" decoding="async" alt="The guest’s propose page — your free slots in their timezone, or their own time."></div>
+  <figcaption>The guest’s propose page — your free slots in their timezone, or their own time.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-rs-sent.jpg" width="1200" height="1069" loading="lazy" decoding="async" alt="After sending — the guest knows exactly what happens next."></div>
+  <figcaption>After sending — the guest knows exactly what happens next.</figcaption>
+</figure></div>
+  <h3 id="">What you do</h3>
+  <ol class="steps-list"><li>You get an email (“Jordan Lee proposed a new time…”) with <b>Accept</b> / <b>Decline</b> buttons, an item in Waiting on you, a notification, and a card at the top of the meeting page.</li><li><b>Accept &amp; move meeting</b> — the meeting moves to the proposed time, the Google Calendar event is patched, invitations are re-sent to everyone, and the guest gets a confirmation. Other pending proposals for that meeting are retired.</li><li><b>Decline</b> — add an optional note (“Monday morning works better?”) and send. The guest gets your note and a link to propose again.</li></ol>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-meeting-proposal.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Proposal cards on the meeting page — the guest’s time in your zone, and in theirs."></div>
+  <figcaption>Proposal cards on the meeting page — the guest’s time in your zone, and in theirs.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/s-rs-decline.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Declining with a note — the guest can propose again straight away."></div>
+  <figcaption>Declining with a note — the guest can propose again straight away.</figcaption>
+</figure></div>
+  <div class="tip warn"><b>Why not Google’s own “Propose a new time”?</b> Google keeps that proposal inside Google’s own invitation UI — it never reaches Jarv-ish, and often never reaches you. The link in every Jarv-ish email goes to the page above instead, so the new time lands in Waiting on you with one-click Accept.</div>
+</section>
+
+<section class="chapter" id="office">
+  <header class="chapter-head">
+    <span class="chapter-num">6</span>
+    <div>
+      <h2>The AI Office</h2>
+      <p class="lead">Your AI Office is a private workforce of agents behind your own gateway. Jarv-ish routes deliverable work there, tracks every request, and brings questions and results back to you.</p>
+    </div>
+  </header>
+  <h3 id="">Connect your office</h3>
+  <ol class="steps-list"><li>Open <b>Settings → My AI Agent</b> (or welcome step 3).</li><li>Enter the gateway URL (for example <code>https://my-agent.example.com/v1</code>) and the gateway token. The token is stored encrypted and never shown again.</li><li>Optionally add your Claw HQ console link — an “Open Claw HQ” button then appears on the Agents page — and choose the hour your morning brief is prepared.</li><li>Click <b>Test connection</b>, then <b>Save changes</b>. The office link status on the Office page turns to “connected”.</li></ol>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/l-settings-agent.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Settings → My AI Agent — gateway URL, token, Claw HQ link and the brief hour."></div>
+  <figcaption>Settings → My AI Agent — gateway URL, token, Claw HQ link and the brief hour.</figcaption>
+</figure>
+  <div class="tip "><b>Plans:</b> On <b>Connect</b> you bring your own agent. On <b>Jarvish</b> one managed agent is included. On <b>Jarvish + Office</b> you get the full multi-agent office and the Agents page.</div>
+  <h3 id="">The Office page</h3>
+  <p>AI Office in the sidebar opens the record of everything you have delegated, with five tabs.</p>
+  <div class="table-wrap"><table><tr><th>Overview</th><td>A live report from your main agent, counters (active requests, follow-ups, needs you, active agents, delivered, today’s activity), the office timeline and the activity feed.</td></tr><tr><th>Office Chat</th><td>A direct chat with your main agent — what you type goes straight to the office, its reply lands here.</td></tr><tr><th>Requests</th><td>Every request with its status (Needs input · Queued · In progress · Completed · Failed · Cancelled), the agent, the conversation, files and the reply box.</td></tr><tr><th>Follow-ups</th><td>Things you asked the office to come back on, with their timing.</td></tr><tr><th>Morning brief</th><td>The office’s own brief — what it did and what it needs.</td></tr></table></div>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/f-office-requests.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Requests — grouped by what they need from you."></div>
+  <figcaption>Requests — grouped by what they need from you.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/f-office-request-detail.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="A request that needs approval — Approve, Request changes, or reply in the box."></div>
+  <figcaption>A request that needs approval — Approve, Request changes, or reply in the box.</figcaption>
+</figure></div>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/f-office-office-chat.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Office Chat — a direct line to your main agent."></div>
+  <figcaption>Office Chat — a direct line to your main agent.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/f-office-follow-ups.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Follow-ups — what you asked the office to come back on, and when."></div>
+  <figcaption>Follow-ups — what you asked the office to come back on, and when.</figcaption>
+</figure></div>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/f-office-morning-brief.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="The office’s own morning brief — what it did overnight and what it needs from you."></div>
+  <figcaption>The office’s own morning brief — what it did overnight and what it needs from you.</figcaption>
+</figure>
+  <h3 id="">Hand a meeting task to the office</h3>
+  <p>Three places, same result:</p>
+  <ul class="bullets"><li><b>Waiting on you</b> / <b>Tasks</b>: <em>Approve &amp; send to office</em> on a tagged task, or <em>Send N to office</em> for the whole batch.</li><li>A meeting’s <b>Tasks</b> tab: the strip “Your office can take N of these” lists the approved tasks with the suggested agent; Edit brief shows exactly what the agent receives; Start, or Start all, sends them.</li><li><b>Talk to your office</b> or <b>Office Chat</b>: just ask (“research the three vendors and compare pricing”).</li></ul>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <video muted loop playsinline preload="none" poster="assets/video/office-handoff-poster.jpg" src="assets/video/office-handoff.mp4" data-autoplay></video></div>
+  <figcaption>▶ Waiting on you → Approve &amp; send to office → AI Office · Requests → Tasks (“With the office” / “Done by Ivy”).</figcaption>
+</figure>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/h-tasks.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Tasks — “With the office” and “Done by Ivy” badges close the loop."></div>
+  <figcaption>Tasks — “With the office” and “Done by Ivy” badges close the loop.</figcaption>
+</figure>
+  <h3 id="">When the agent has a question</h3>
+  <ol class="steps-list"><li>The request flips to <b>Needs your input</b> (or Needs approval when it asks permission). It appears in Waiting on you under “The office is waiting on you”, as a notification, and at the top of your next morning brief.</li><li>Click it → Office → Requests opens on that request. Read the agent’s message, type your answer in the reply box and send. You can also answer by voice from Talk to your office.</li><li>The status returns to In progress. Other requests keep running meanwhile.</li></ol>
+  <h3 id="">When the work is delivered</h3>
+  <p>The request becomes <b>Delivered</b> with the result summary and any files. The linked task is marked <b>Done by</b> the agent automatically on Tasks and the dashboard; a notification and the morning brief announce it. A failed request marks the task Blocked so you see it; a cancelled one hands the task back to you.</p>
+  <h3 id="">Agents</h3>
+  <p>On the Jarvish + Office plan the Agents page shows your main agent, each specialist with live status and current assignment, and the full roster on demand. <b>Request agent / swarm</b> asks the office to add capacity. On other plans the item stays visible but greyed, with a link to the plan that unlocks it.</p>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/f-agents.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Agents — roster and live status."></div>
+  <figcaption>Agents — roster and live status.</figcaption>
+</figure>
+</section>
+
+<section class="chapter" id="talk">
+  <header class="chapter-head">
+    <span class="chapter-num">7</span>
+    <div>
+      <h2>Talk to your office</h2>
+      <p class="lead">One speech-to-speech conversation with your assistant: ask about your day, delegate a request, hear your brief, or answer an agent’s question.</p>
+    </div>
+  </header>
+  <ol class="steps-list"><li>Open <b>AI Office → Talk to your office</b> and click <b>Start conversation</b>. Allow the microphone when the browser asks.</li><li>Choose <b>Continuous</b> (it listens and replies, and you can interrupt any time) or <b>Push to talk</b>.</li><li>Or type in the box at the bottom — voice and text share the same session, and the transcript appears on the right.</li><li><b>History</b> shows past sessions. <b>Memory</b> shows what your assistant has been told to remember (approved items only).</li><li>If the office is offline, the assistant still answers from what Jarv-ish knows; office requests are queued until it’s back.</li></ol>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/g-assistant.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Talk to your office — voice stage, transcript panel, Continuous / Push to talk."></div>
+  <figcaption>Talk to your office — voice stage, transcript panel, Continuous / Push to talk.</figcaption>
+</figure>
+  <div class="tip "><b>Voice:</b> The assistant’s name, language, voice and speaking style come from <b>Settings → Your assistant</b> — and the same voice reads your morning brief and speaks in meetings. Under Advanced you can force the classic or instant voice engine if your browser struggles with the default.</div>
+</section>
+
+<section class="chapter" id="morning">
+  <header class="chapter-head">
+    <span class="chapter-num">8</span>
+    <div>
+      <h2>The morning brief</h2>
+      <p class="lead">Every morning your assistant walks you through the day out loud — two to four minutes, like the first call of the day. Your assistant on one side, you on the other, and what’s being said as a live caption between you.</p>
+    </div>
+  </header>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com/brief</span></div>
+  <video muted loop playsinline preload="none" poster="assets/video/morning-brief-poster.jpg" src="assets/video/morning-brief.mp4" data-autoplay></video></div>
+  <figcaption>▶ The brief as a call: the caption follows each section, the chapter dots advance, and every section is a card below.</figcaption>
+</figure>
+  <ol class="steps-list"><li>Open <b>Morning brief</b> in the sidebar, or the email’s <b>▶ Play your brief</b> button (it starts speaking on arrival).</li><li>Press <b>Play brief</b>. The caption follows each section as it is spoken; the small bar under it shows where you are — click a segment to jump.</li><li><b>Turn on camera</b> if you want to see yourself in the call — handy when you record your screen. Your choice is remembered on this browser, and the camera only ever starts from your tap.</li><li><b>Read instead</b> shows the whole brief as text. Every section is also a card below, with links straight into the app.</li><li>When it ends: <b>Start with Waiting on you</b> — the button pulses when something is actually waiting.</li></ol>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/h-morning-brief-playing.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Your assistant speaking, you on the right, the current section as a caption, and the pulsing “Start with Waiting on you”."></div>
+  <figcaption>Your assistant speaking, you on the right, the current section as a caption, and the pulsing “Start with Waiting on you”.</figcaption>
+</figure>
+  <h3 id="">What it covers</h3>
+  <p>In this order — and a section with nothing to say is left out entirely, so it never reads you a list of zeros:</p>
+  <div class="table-wrap"><table><tr><th>Good morning</th><td>Sets the tone from the real load: “I hope you have your coffee for this one…” on a heavy day, “here’s the short version” on a light one.</td></tr><tr><th>Waiting on you</th><td>The true total from your queue, and inside it how many are office-sized: “Of those, 7 are things I can hand to the office the moment you approve them — they won’t move until you do. If you do one thing today, make it that.” Then agent questions, reschedule requests, promises due, suggested automations and plans to review.</td></tr><tr><th>Today’s meetings</th><td>Each meeting with its time and who it is with, what came out of the last one with that group, your open promises to them, what they owe you, office work you can bring — and a reminder that the brief with the join link lands an hour before.</td></tr><tr><th>Your AI Office</th><td>Online or offline, active requests, follow-ups tracked, items needing your input, active agents, delivered, updates today — and which agents need your feedback most.</td></tr><tr><th>Last night’s meeting</th><td>“From last night’s launch prep: 3 things came out of it… 2 of them I can take off your plate immediately, once I have your approval.”</td></tr><tr><th>Projects · Goals</th><td>Only when you have them: each active project’s health and why; your goals with progress and confidence, so they stay front of mind.</td></tr><tr><th>Needs attention</th><td>Only when true: the office gateway unreachable, the agent’s AI provider out of credit, failed requests, an agent that has been waiting days on you.</td></tr><tr><th>Day forecast · Where to start</th><td>Light / moderate / heavy with real advice (deep work, protect the gaps, take the afternoon off), then one concrete first step.</td></tr></table></div>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/h-morning-brief-sections.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Every section as a card with links into the app; the card being spoken lights up."></div>
+  <figcaption>Every section as a card with links into the app; the card being spoken lights up.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/h-morning-brief-sections-2.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Further down: what to look at first, the day forecast, what the office finished overnight, and the overnight log."></div>
+  <figcaption>Further down: what to look at first, the day forecast, what the office finished overnight, and the overnight log.</figcaption>
+</figure></div>
+  <div class="tip good"><b>Honest by design:</b> Every number is a live count from your own workspace, the wording rotates day to day so it never sounds canned, and it only offers help where it can actually give it — “I’d do it for you, but approvals are for humans only.” The morning email carries the same sections in text.</div>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/h-morning-brief-read.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="“Read instead” — the whole brief as text, section by section."></div>
+  <figcaption>“Read instead” — the whole brief as text, section by section.</figcaption>
+</figure>
+</section>
+
+<section class="chapter" id="workspace">
+  <header class="chapter-head">
+    <span class="chapter-num">9</span>
+    <div>
+      <h2>Tasks, projects, goals and reports</h2>
+      <p class="lead">Where the work that came out of your meetings lives once it has been approved — and how you see whether it is moving.</p>
+    </div>
+  </header>
+  <h3 id="">Tasks</h3>
+  <p>All action items from your meetings (and any you create), with status, priority, owner, due date and the source meeting. The approval card sits at the top; filter by status (To do, In progress, Blocked, Done) and priority. Ask AI on a row opens the assistant with that task as context. Tasks handed to the office show <b>With the office</b>, then <b>Done by</b> the agent.</p>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/h-tasks.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Tasks — approvals on top, the board below."></div>
+  <figcaption>Tasks — approvals on top, the board below.</figcaption>
+</figure>
+  <h3 id="">Projects</h3>
+  <p>Projects group meetings, tasks, office work, milestones, risks and decisions. Health is derived from those — never typed in. Create one with <b>New project</b>, or say “we’re launching …” to Jarv-ish and approve its plan. Open a project for its workspace: objective, milestones, tasks, office requests, risks and plan proposals.</p>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/h-projects.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Projects — health and status at a glance."></div>
+  <figcaption>Projects — health and status at a glance.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/h-project.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="A project workspace: milestones, office activity, risks, decisions and follow-ups."></div>
+  <figcaption>A project workspace: milestones, office activity, risks, decisions and follow-ups.</figcaption>
+</figure></div>
+  <h3 id="">Goals</h3>
+  <p>Outcome-level goals with progress and confidence rolled up from the projects linked to them. New goal creates one; link projects from the project page.</p>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/h-goals.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Goals — outcomes your projects roll up to."></div>
+  <figcaption>Goals — outcomes your projects roll up to.</figcaption>
+</figure>
+  <h3 id="">Reports</h3>
+  <p>Meetings per week and by status, your AI usage (transcription, analysis, assistant), and your office’s token usage per agent — pulled from the office every morning, or on demand with <b>Refresh from office</b>.</p>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/h-reports.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Reports — meetings, AI usage and office activity."></div>
+  <figcaption>Reports — meetings, AI usage and office activity.</figcaption>
+</figure>
+</section>
+
+<section class="chapter" id="settings">
+  <header class="chapter-head">
+    <span class="chapter-num">10</span>
+    <div>
+      <h2>Settings, profile and notifications</h2>
+      <p class="lead">Everything you can change about your assistant, your calendar, your agent, your look and your account.</p>
+    </div>
+  </header>
+  <h3 id="">Your assistant</h3>
+  <p>Name, preferred language, voice and speaking style — used for every spoken reply, every brief, and when it speaks in a meeting. Advanced lets you choose the voice engine.</p>
+  <figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/l-settings-assistant.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Settings → Your assistant."></div>
+  <figcaption>Settings → Your assistant.</figcaption>
+</figure>
+  <h3 id="">My AI Agent, Appearance, Google Workspace, Plans</h3>
+  <p><b>My AI Agent</b> is the office connection (chapter 6). <b>Appearance</b> switches light and dark. <b>Google Workspace</b> connects your calendar (invitations, RSVPs, transcripts of past Google Meet meetings). <b>Plans</b> shows your current plan and lets you switch; upgrades apply within a minute of checkout.</p>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/l-settings-3.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="My AI Agent — the office connection and the brief hour."></div>
+  <figcaption>My AI Agent — the office connection and the brief hour.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/l-settings-4.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Appearance and Google Workspace."></div>
+  <figcaption>Appearance and Google Workspace.</figcaption>
+</figure></div>
+  <h3 id="">Profile and notifications</h3>
+  <p><b>Profile</b> holds your display name, timezone (used for the morning brief, meeting times and reminders) and password. <b>Notifications</b> lists every event in your workspace — meeting analysed, proposal received, office delivered or waiting, recap answered — with Mark all read. The bell at the top shows the unread count.</p>
+  <div class="two-up"><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/l-profile.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Profile — name, timezone, password."></div>
+  <figcaption>Profile — name, timezone, password.</figcaption>
+</figure><figure class="shot">
+  <div class="frame"><div class="bar"><i></i><i></i><i></i><span>app.jarv-ish.com</span></div>
+  <img src="assets/img/guide/l-notifications.jpg" width="1200" height="750" loading="lazy" decoding="async" alt="Notifications — the full history, newest first."></div>
+  <figcaption>Notifications — the full history, newest first.</figcaption>
+</figure></div>
+</section>
+
+<section class="chapter" id="plans">
+  <header class="chapter-head">
+    <span class="chapter-num">11</span>
+    <div>
+      <h2>Plans</h2>
+      <p class="lead">Three plans. Everything in the guide above works on all of them except where a feature is named as office-only.</p>
+    </div>
+  </header>
+  <div class="table-wrap"><table><tr><th>Connect — $49 / month</th><td>Meetings, transcripts &amp; AI analysis · voice assistant · meeting agent · tasks, projects &amp; goals · connect your own agent (the office runs on your gateway). No managed agent included.</td></tr><tr><th>Jarvish — $99 / month</th><td>Everything in Connect, plus one general skilled agent included, no setup — delegate work from chat or voice, and a morning brief every day. Single agent.</td></tr><tr><th>Jarvish + Office — $499 / month</th><td>Everything in Jarvish, plus the full AI Office — up to 20 agents or 7 swarms, specialist agents &amp; roster, office token usage per agent, priority support.</td></tr></table></div>
+  <p>Checkout happens on the store; access unlocks automatically when the paid order arrives, matched by the checkout email — use the same email you sign in with. Switching plans keeps your data and settings.</p>
+</section>
+
+<section class="chapter" id="answers">
+  <header class="chapter-head">
+    <span class="chapter-num">12</span>
+    <div>
+      <h2>Quick answers</h2>
+      <p class="lead">The questions people actually ask in the first week.</p>
+    </div>
+  </header>
+  <div class="table-wrap"><table><tr><th>Why is a meeting time different on two pages?</th><td>Times are shown in the meeting’s own timezone (with the zone label), falling back to your profile timezone. Set your timezone in Profile.</td></tr><tr><th>Nothing happened when I clicked Approve</th><td>The row disappears immediately and a message confirms it. If the server refuses, the row comes back with the reason. Refresh if the badge count looks stale.</td></tr><tr><th>I only got one email before my meeting</th><td>That is by design: an hour before, you get the brief with the join link inside it — reminder and brief in one. Attendees still get their own reminder.</td></tr><tr><th>No day-before email arrived</th><td>Nothing was open for that meeting, so nothing was sent. When there is something, you get a one-line offer with a “Show me the agenda” button.</td></tr><tr><th>The pre-meeting brief mentions the wrong client</th><td>Only the other side of the table defines “this group”. A colleague of yours who joins nearly every call is treated as internal automatically.</td></tr><tr><th>Jarv-ish doesn’t answer in the call</th><td>Say the name you gave your assistant (or “Jarvis”). In Observer mode it never speaks; in Addressed only it needs its name once, then follow-ups work for 25 seconds.</td></tr><tr><th>A guest proposed a time in Google Calendar</th><td>Google keeps that inside Google. Ask them to use the “Propose another” link in the invitation, or change the time yourself with Edit meeting.</td></tr><tr><th>Background blur doesn’t apply</th><td>It runs on your own computer in Chrome or Edge; older machines can be slow. Pick None to turn it off.</td></tr><tr><th>I left the room by mistake</th><td>The host can Reopen room for 60 minutes; the same link works for everyone.</td></tr><tr><th>No office buttons on my tasks</th><td>Your AI Office isn’t connected yet — Settings → My AI Agent. Until then you get Approve, Edit &amp; approve and Dismiss.</td></tr><tr><th>Agents is greyed out</th><td>It is part of the Jarvish + Office plan — click it for the upgrade link. Your single agent still works everywhere else.</td></tr><tr><th>Where do agent questions go?</th><td>Waiting on you → “The office is waiting on you”, plus a notification and the top of your next morning brief. Answer in Office → Requests, or by voice.</td></tr></table></div>
+</section>
+
+  <section class="cta-band">
+    <span class="eyebrow" style="color:var(--cyan)">Ready</span>
+    <h2>Everything above works on your first meeting.</h2>
+    <p>Create a workspace, name your assistant, and get a brief before your next call.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+      <a class="btn btn-primary" href="https://app.jarv-ish.com/register">Get started</a>
+      <a class="btn btn-ghost" href="https://app.jarv-ish.com/login">Sign in</a>
+    </div>
+  </section>
+  </div>
+</div>
+</main>
+
+<a class="top-link" href="#top" id="topLink">↑ Top</a>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="mark">J</span>Jarv-ish</a>
+    <nav>
+      <a href="index.html">Home</a><a href="guide.html">Guide</a><a href="index.html#pricing">Pricing</a><a href="https://app.jarv-ish.com/login">Sign in</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a><a href="about.html">About</a><a href="roadmap.html">Roadmap</a>
+    </nav>
+    <span>© <span id="year"></span> Jarv-ish. All rights reserved.</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  var menuBtn = document.getElementById('menuBtn'), navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', function(){ navLinks.classList.toggle('open'); });
+
+  // Contents: a sticky column on desktop, a collapsed box on a phone.
+  var tocBox = document.getElementById('tocBox');
+  var narrow = window.matchMedia('(max-width:1040px)');
+  function syncToc(){ tocBox.open = !narrow.matches; }
+  syncToc();
+  if (narrow.addEventListener) narrow.addEventListener('change', syncToc);
+  tocBox.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ if (narrow.matches) tocBox.open = false; });
+  });
+
+  // Videos play only while on screen, and only once they have been reached.
+  if ('IntersectionObserver' in window) {
+    var vObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var v = e.target;
+        if (e.isIntersecting) { if (v.preload === 'none') { v.preload = 'metadata'; v.load(); } var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+        else { v.pause(); }
+      });
+    }, { threshold: 0.35 });
+    document.querySelectorAll('video[data-autoplay]').forEach(function(v){ vObs.observe(v); });
+
+    // Contents highlight the chapter you're reading.
+    var links = {};
+    document.querySelectorAll('#tocList a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var sObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) {
+          Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
+          if (links[e.target.id]) links[e.target.id].classList.add('active');
+        }
+      });
+    }, { rootMargin: '-88px 0px -70% 0px', threshold: 0 });
+    document.querySelectorAll('.chapter').forEach(function(s){ sObs.observe(s); });
+  } else {
+    document.querySelectorAll('video[data-autoplay]').forEach(function(v){ v.play(); });
+  }
+
+  var topLink = document.getElementById('topLink');
+  window.addEventListener('scroll', function(){
+    topLink.classList.toggle('show', window.scrollY > 900);
+  }, { passive: true });
+</script>
+</body>
+</html>
